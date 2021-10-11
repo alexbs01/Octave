@@ -10,12 +10,20 @@
 - ```NaN``` significa Not a Number, si una operación no da como resultado un número, tendrá esta salida.  
 - **i**, para operar con números imaginarios, también se puede utilizar **j** pero este último mejor olvidarlo.  
 
-## Operadores aritmeticos
+## Operadores
 
-Octave al ser un lenguaje de programación para hacer cálculos matemáticos tiene todos los distintos operadores que se puedan necesitar
+Octave al ser un lenguaje de programación para hacer cálculos matemáticos tiene todos los distintos operadores que se puedan necesitar, ya sean aritméticos, relacionales o lógicos.  
 
-- **+**, **-**, **/**, **\***: Para las sumas, restas, divisiones y multiplicaciones.  
-- **^**: El acento circunflejo para hace potencias.  
+| Operador aritmético | Significado    | Operador relacional |    Significado    | Operador lógico | Significado |
+| :------------------ | :------------- | :-----------------: | :---------------: | --------------: | ----------: |
+| +                   | Suma           |          <          |     Menor que     |               & |     AND (y) |
+| -                   | Resta          |         <=          | Menor o igual que |              \| |      OR (o) |
+| /                   | División       |          >          |     Mayor que     |               ~ |    NOT (no) |
+| \*                  | Multiplicación |         >=          | Mayor o igual que |                 |             |
+| ^                   | Potencia       |         ==          |    Idéntico a     |                 |             |
+|                     |                |      ~=     !=      |    Distinto de    |                 |             |
+
+
 
 ## Formatos de los numeros
 
@@ -124,4 +132,34 @@ Hay algunas funciones que permiten dar más claridad a las gráficas.
 Si creamos una función y queremos seguir editándola podemos hacerlo con el comando ```hold on``` y con ```hold off``` para dejar de editarla. Y si queremos crear otra gráfica se puede con ```figure(n)``` donde *n* es el número de la función.  
 
 Con ```axis equal``` podemos forzar a que los ejes midan lo mismo para no distorsionar la imagen.  
+
+### Ejemplos de los operadores logicos y relacionales
+
+```octave
+>> v = -1:1:5 % Se crea una matriz de una fila
+v =
+  -1   0   1   2   3   4   5
+
+>> v >= 2 % Comprueba cuales de los elementos cumplen la condición de que sea >= 2
+ans =
+  0  0  0  1  1  1  1
+  
+>> (v >= 2)&(v < 4) % Hace la misma comprobación de ante, pero añade que los números deben ser < 4
+ans =
+  0  0  0  1  1  0  0
+```
+
+-----
+
+## Archivos .m
+
+Con Octave se pueden hacer recopilaciones de código para poder usarlo múltiples veces, esto se hace con el editor y nos permite escribir instrucciones muy largas y poder corregirlo más fácilmente. Todas estas instrucciones se guardan en archivos .m.  
+
+Para ver ejemplos de archivos .m de recopilaciones de código y de funciones, mirar en la carpeta [**src**](./src) de este repositorio.  
+
+-----
+
+## Cálculo simbólico
+
+El cálculo simbólico nos permite dibujar funciones de una forma distinta, y hacer derivadas, integrales y otros tipos de operaciones con funciones. El cálculo simbólico no viene instalado por defecto en Octave, por lo que hay que instalarlo a través de la librería de *symbolic*.  
 
