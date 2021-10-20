@@ -163,3 +163,21 @@ Para ver ejemplos de archivos .m de recopilaciones de código y de funciones, mi
 
 El cálculo simbólico nos permite dibujar funciones de una forma distinta, y hacer derivadas, integrales y otros tipos de operaciones con funciones. El cálculo simbólico no viene instalado por defecto en Octave, por lo que hay que instalarlo a través de la librería de *symbolic*.  
 
+### Variables simbolicas
+
+Para trabajar con el modo simbólico debemos declarar variables simbólicas con la instrucción ```syms <nombreVariable>```.  
+
+```octave
+% Para definir variables simbolicas de una funcion se hace:
+syms a b c; % Las variables 'a', 'b' y 'c', tienen ahora un caracter simbolico
+funcion = a^2 + b + c;
+```
+
+### Constantes simbolicas
+
+También se pueden asignar constantes simbólicas para usarlas durante los programas.  
+
+```octave
+constanteSimbolica = sym('4/5'); % Y ahora la variables "constanteSimbolica" tiene un valor constante simbolico de 4/5
+```
+
