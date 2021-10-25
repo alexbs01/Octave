@@ -1,5 +1,25 @@
 # Octave
 
+## Índice
+
+- [Algunos datos importantes](#Algunos-datos-importantes)
+- [Operadores](#Operadores)
+- [Formatos de los números](#Formatos-de-los-números)
+- [Variables numéricas](#Variables-numéricas)
+- [Funciones predefinidas](#Funciones-predefinidas)
+- [Representaciones gráficas](#Representaciones-gráficas)
+  - [Vectores](#Vectores)
+  - [Funciones importantes para vectores](#Funciones-importantes-para-vectores)
+  - [Operaciones de matrices de elemento a elemento](#Operaciones-de-matrices-de-elemento-a-elemento)
+  - [Función plot](#Función-plot)
+    - [Funciones para plot](#Funciones-para-plot)
+  - [Ejemplos de los operadores lógicos y relacionales](#Ejemplos-de-los-operadores-ógicos-y-relacionales)
+- [Archivos .m](#Archivos-.m)
+- [Cálculo simbólico](#Cálculo-simbólico)
+  - [Variables simbólicas](#Variables-simbólicas)
+  - [Constantes simbólicas](#Constantes-simbólicas)
+  - [Evaluación de variables](#Evaluación-de-variables)
+
 ## Algunos datos importantes
 
 - Octave **distingue** mayúsculas de minúsculas, por lo que el nombre de todas las funciones estarán por defecto en minúsculas.  
@@ -25,7 +45,7 @@ Octave al ser un lenguaje de programación para hacer cálculos matemáticos tie
 
 
 
-## Formatos de los numeros
+## Formatos de los números
 
 En Octave se puede cambiar la precisión y el número de dígitos que queremos para los resultados con el comando ```format <tipoFormato>```.  
 
@@ -38,7 +58,7 @@ Se puede comprobar como funciona este cambio de formato con números irracionale
 
 -----
 
-## Variables numericas
+## Variables numéricas
 
 Como en muchos lenguajes de programación se pueden guardar valores dentro de variables, y posteriormente, operar con ellas.
 
@@ -103,7 +123,7 @@ v.^2 = 4 16 36 64
 
 Y esto sirve con todos los operadores, como ```.+```, ```.-```, ```.\*```, ```./``` y ```.^```.   
 
-### Funcion plot
+### Función plot
 
 Permite dibujar puntos en el plano usando vectores o funciones. Por ejemplo:  
 
@@ -133,7 +153,7 @@ Si creamos una función y queremos seguir editándola podemos hacerlo con el com
 
 Con ```axis equal``` podemos forzar a que los ejes midan lo mismo para no distorsionar la imagen.  
 
-### Ejemplos de los operadores logicos y relacionales
+### Ejemplos de los operadores lógicos y relacionales
 
 ```octave
 >> v = -1:1:5 % Se crea una matriz de una fila
@@ -163,7 +183,7 @@ Para ver ejemplos de archivos .m de recopilaciones de código y de funciones, mi
 
 El cálculo simbólico nos permite dibujar funciones de una forma distinta, y hacer derivadas, integrales y otros tipos de operaciones con funciones. El cálculo simbólico no viene instalado por defecto en Octave, por lo que hay que instalarlo a través de la librería de *symbolic*.  
 
-### Variables simbolicas
+### Variables simbólicas
 
 Para trabajar con el modo simbólico debemos declarar variables simbólicas con la instrucción ```syms <nombreVariable>```.  
 
@@ -173,11 +193,18 @@ syms a b c; % Las variables 'a', 'b' y 'c', tienen ahora un caracter simbolico
 funcion = a^2 + b + c;
 ```
 
-### Constantes simbolicas
+### Constantes simbólicas
 
 También se pueden asignar constantes simbólicas para usarlas durante los programas.  
 
 ```octave
 constanteSimbolica = sym('4/5'); % Y ahora la variables "constanteSimbolica" tiene un valor constante simbolico de 4/5
+```
+
+### Evaluación de variables
+
+Con las variables simbólicas se puede utilizar la función subs para evaluar punto X. La sintaxis de la función es ```subs(polinomio, variable, valor);``` o ```subs(polinomio, {variable1, ..., variableN}, {valor1,..., valorN});``` según queramos obtener una imagen o que en los valores se le asignen se sustituyan por los valores dados.  
+
+```octave
 ```
 
