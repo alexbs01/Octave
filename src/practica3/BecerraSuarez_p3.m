@@ -13,6 +13,7 @@ function y = ejes()
     plot([0, 0], [-1000, 1000], "k") ;  % Eje OY
 endfunction
 
+% Calcula los puntos de corte con los ejes
 function solucionesFunciones(funcion, x)
     syms x;
     corteX = solve(funcion);
@@ -25,17 +26,18 @@ function solucionesFunciones(funcion, x)
     corteY
 endfunction  
 
-% Dibuja las asintotas horizontales
+% Calula las asintotas horizontales comprobando el límite cuando x tiende a + o - infinito
 function y = asintotasH(funcion, x)
     asintotaHorizontalPos = limit(funcion, x, inf)
     plot([-10, 10], [sym2poly(asintotaHorizontalPos), sym2poly(asintotaHorizontalPos)], "g--"); % Dibujo de la asintota horizontal
     asintotaHorizontalNeg = limit(funcion, x, -inf)
     plot([-10, 10], [sym2poly(asintotaHorizontalNeg), sym2poly(asintotaHorizontalNeg)], "g--"); % Dibujo de la asintota horizontal
-    if(limit(funcion, x, inf) != inf && limit(funcion, x, -inf) != inf)
+    if(asintotaHorizontalPos != inf || asintotaHorizontalNeg != inf)
         printf("\nComo tiene al menos una asintota horizontal, no tendra oblicuas\n");
     endif
 endfunction
 
+% Calcula la asíntota oblicua y la debuja utilizando su ecuación de la recta tangente
 function y = asintotaObli(funcion, x)
     m = limit(funcion/x, x, inf)
     n = limit((funcion - m*x), x, inf)
@@ -43,8 +45,10 @@ function y = asintotaObli(funcion, x)
     ezplot(rectaOblicua, [-10, 10]);
 endfunction
 
+% Calcula las asíntotas verticales (solo sirve con funcionces racionales), resuelve el denominador y hace
+% el limite cuando x tiende a esos valores
 function y = asintotasVert(funcion, x)
-    denominadorFuncion = (funcion / numden(funcion))^-1;
+    denominadorFuncion = (funcion / numden(funcion))^-1; % Obtiene el denominador de la función
     resultadoDenominador = solve(denominadorFuncion)
     for i = 1:length(resultadoDenominador);
         asintotaVertical = limit(funcion, x, resultadoDenominador(i));
@@ -54,6 +58,7 @@ function y = asintotasVert(funcion, x)
     endfor
 endfunction
 
+% Realiza el método de Newton-Raphson especificando el un número de iteraciones
 function y = metodoNR(funcion, x, inicio, iteraciones)
     syms x0;
     funcionNR = x0 - (subs(funcion, x, sym(x0)))/(subs(diff(funcion), x, sym(x0)));
@@ -67,6 +72,7 @@ function y = metodoNR(funcion, x, inicio, iteraciones)
     endfor
 endfunction
 
+% Realiza el método de dicotomía especificando un itervalo y un error mínimo
 function y = dicotomia(funcion, x, extIzq, extDe, errorMinimo)
     iteracion = 1;
     do
@@ -232,7 +238,7 @@ syms x;
     printf("\n------------------------------------------------------------------------------------------------------\n");
     printf("\nEjercicio 4\n");
     printf("Apartado A\n");
-    f4 = x*e^(1/x);
+    f4 = x*e^(1/x)
     figure 4;
     hold on;
     ezplot(f4);
@@ -240,10 +246,12 @@ syms x;
     asintotasH(f4, x); % Asintota Horizontal
     asintotaObli(f4, x); % Asintota Oblicua
     plot([0, 0], [-1000, 1000], "r--"); % Asintota Vertical
-    solucionesFunciones(f4, x); % No tiene corte con los ejes
-    printf("Existen puntos críticos en %f\n",puntoCritico = double(solve(diff(f4))));
+    solucionesFunciones(f4, x);
     
-    %imagenPuntoCritico = double(subs(f4, x, puntoCritico));
+    printf("\nExiste un punto de corte en x = 0 por la izquierda: ");
+    corteEjesOXyOY = limit(f4, x, 0, 'left')
+    printf("\nExisten puntos críticos en %f\n",puntoCritico = double(solve(diff(f4))));
+    
     segundaDerivadaF4 = diff(f4, x, 2);
     signoSegundaDerivada = subs(segundaDerivadaF4, x, puntoCritico);
     if(signoSegundaDerivada > 0)
@@ -270,7 +278,7 @@ syms x;
             printf("El extremo izquierdo (x = 0.5) es el máximo absoluto de la función\n");
         endif
         
-        printf("Como sabemos del apartado anterior que hay un minimo en x = 1, \n");
+        printf("\nComo sabemos del apartado anterior que hay un minimo en x = 1, \n");
         printf("ya no seguimos buscando más porque en este intervalo, este \n");
         printf("valor será un mínimo absoluto del intervalo. \n");
     
@@ -293,16 +301,17 @@ syms x;
         imagenExtremoDerecho = subs(f5, x, 0)
         
         if(imagenExtremoIzquierdo*imagenExtremoDerecho <= 0)
-            printf("Existe al menos una solución en el intervalo [-3, 0]\n");
+            printf("\nExiste al menos una solución en el intervalo [-3, 0]\n");
          else
-            printf("No se puede asegurar que no haya ninguna solución en el intervalo [-3, 0]\n");
+            printf("\nNo se puede asegurar que no haya ninguna solución en el intervalo [-3, 0]\n");
         endif
         
-        printf("Sabiendo que la funcion es una función cuadrática completa, podemos deducir que esta solucion\n");
+        printf("\nSabiendo que la funcion es una función cuadrática completa, podemos deducir que esta solucion\n");
         printf("única, ya que para que estuvieran las dos soluciones en el intervalo, ambas imágenes\n");
         printf("deberían de tener el mismo signo\n");
         
     % Apartado B
+        % Ponemos los valores de la funcion en simbólico para que no salga warnings
         extremoIzq = sym('-2');
         extremoDe = sym('0');
         errorMinimo = sym('0.04');
@@ -323,14 +332,15 @@ syms x;
     printf("igual a 1 (orden 1)\n");
  
     f6 = input("\nEscribe una funcion: ");
-    
     pendienteEn0 = subs(diff(f6), x, 0);
     
+    % Se calculan las funciones de la recta tangente, y los polinomio de Mc-Laurin de orden 0 y 1
     printf("\nObtenemos las funciones necesarias\n");
     polRectaTangente = subs(f6, x, 0) + pendienteEn0*(x - 0)
     polMcLaurinGrado0 = taylor(f6, x, 0, 'order', 1)
     polMcLaurinGrado1 = taylor(f6, x, 0, 'order', 2)
     
+    % Calculamos sus repectivas imágenes
     printf("\nVemos la imagen en x = 0 de cada una de las funciones anteriores\n");
     imagenPolRectaTangente = subs(polRectaTangente, x, 0)
     imagenPolMcLaurinGrado0 = subs(polMcLaurinGrado0, x, 0)
@@ -338,6 +348,7 @@ syms x;
     
     printf("\n##############\n");
     
+    % Volvemos a repetir el proceso pero centrándolo todo en otro punto, en este caso en x = 2
     printf("\nAhora realizaremos lo mismo pero centrando todo en x = 2\n");
     polRectaTangente = subs(f6, x, 2) + pendienteEn0*(x - 2)
     polMcLaurinGrado0 = taylor(f6, x, 2, 'order', 1)
@@ -348,8 +359,11 @@ syms x;
     imagenPolMcLaurinGrado0 = subs(polMcLaurinGrado0, x, 2)
     imagenPolMcLaurinGrado1 = subs(polMcLaurinGrado1, x, 2)
     
+    % Explicación del motivo de los resultados
     printf("\nObservando los resultados, podemos decir que si centramos las 3 funciones\n");
-    printf("en el mismo punto, darán 3 resultados inguales\n");
+    printf("en el mismo punto, darán 3 resultados inguales, esto es debido a que la función de \n");
+    printf("la recta tangente es igual al polinomio de Mc-Laurin de orden 1, y el de orden 0 \n");
+    printf("representa en que puntos están centrados ambas funciones, por lo que siempre coinciden\n");
 
 % ----------------------------------------------------
 
@@ -364,14 +378,17 @@ syms x;
     
     f7 = sin(x).^2
     
+    % Calculamos los polinomios de Mc-Laurin de orden 4 y 5 y veremos que resulta ser iguales
     polMcLaurinOrden4 = taylor(f7, x, 0, 'order', 5)
     polMcLaurinOrden5 = taylor(f7, x, 0, 'order', 6)
     
     printf("\nComo podemos ver, ambos polinomios de Mc-Laurin son idénticos para averiguar por qué, \n");                
     printf("calcularemos el sumando correspondiente al de orden 5 para ver que pasa\n");                
     
+    % Volvemos a calcular el polinomio de orden 5 pero a mano
     polTaylorOrden5 = (diff(f7, x, 5))/(factorial(5))*x.^5*x.^5
     
+    % Explicación del resultado anterior y previsión de su resultado cuando se centre en el 0
     printf("Viendo el polinomio resultante podremos ver que en el numerador solo hay productos\n");
     printf("y que para crear este quinto sumando del polinomio de Mc-Laurin, hay que centrarlo en x = 0,\n");
     printf("y para centrarlo, hay que ver la imagen en x = 0 de la quinta derivadad de f7.\n");
@@ -395,19 +412,22 @@ syms x;
     potencia = sym('0.27');
     f8 = x^potencia
     
-    aproximacion = sym('3');
+    % Calculamos los polinomios de Taylor de orden 1 y 2
+    centro = sym('3');
     orden1 = sym('2');
     orden2 = sym('3');
-    polTaylorOrden1 = taylor(f8, x, aproximacion, 'order', orden1); 
-    polTaylorOrden2 = taylor(f8, x, aproximacion, 'order', orden2); 
+    polTaylorOrden1 = taylor(f8, x, centro, 'order', orden1); 
+    polTaylorOrden2 = taylor(f8, x, centro, 'order', orden2); 
     
-    printf("Aproximando x a %f da como resultado en los primeros polinomios de orden 1 y 2\n", double(aproximacion));
+    % Primeras 2 aproximaciones con los polinomios de orden 1 y 2
+    printf("Centrando x a %f da como resultado en los primeros polinomios de orden 1 y 2\n", double(centro));
     aproximacion1 = double(subs(polTaylorOrden1, x, e))
     aproximacion2 = double(subs(polTaylorOrden2, x, e))
     
-    printf("\nPara mejorar la aproximación podemos hacer el polinomio de Taylor de orden 3");
+    % Se calcula el polinomio de Taylor de orden 3 para mejorar la aproximación
+    printf("\nPara mejorar la aproximación podemos hacer el polinomio de Taylor de ");
     orden3 = sym('4')
-    polTaylorOrden3 = taylor(f8, x, aproximacion, 'order', orden3)
+    polTaylorOrden3 = taylor(f8, x, centro, 'order', orden3)
     aproximacion3 = double(subs(polTaylorOrden3, x, e));
     printf("\nUtilizando el polinomio de Taylor anterior, da como resultado %f\n", aproximacion3);
 
@@ -422,10 +442,12 @@ syms x;
     printf("\n------------------------------------------------------------------------------------------------------\n");
     printf("\nEjercicio 9\n");
  
+    % Se muestra que función aproximaremos con el polinomio de Mc-Laurin
     syms m m0 v c;
     printf("Partiendo de la fórmula de la masa de la Teoría de la Relatividad,");
     m = (m0)/(sqrt(1-(v.^2)/(c.^2)))
     
+    % Aplicamos el polinomio de Mc-Laurin de orden 2 sobre la función anterior
     printf("\nSe puede aproximar la solución utilizando el polinomio de Mc-Laurin de orden 2");
     aproximacionDeMcLaurin = taylor(m, v, 0, 'order', 3)
 
@@ -443,17 +465,19 @@ syms x;
     f10 = sin(x)
     
     % Apartado A
-        aproximacion = sym('0');
+        % Calculamos todos los polinomios necesarios para el ejercicio (los de orden 1, 3, 5 y 7)
+        centro = sym('0');
         orden1 = sym('2');
         orden3 = sym('4');
         orden5 = sym('6');
         orden7 = sym('8');
-        polTaylorOrden1 = taylor(f10, x, aproximacion, 'order', orden1)
-        polTaylorOrden3 = taylor(f10, x, aproximacion, 'order', orden3)
-        polTaylorOrden5 = taylor(f10, x, aproximacion, 'order', orden5)
-        polTaylorOrden7 = taylor(f10, x, aproximacion, 'order', orden7)
+        polTaylorOrden1 = taylor(f10, x, centro, 'order', orden1)
+        polTaylorOrden3 = taylor(f10, x, centro, 'order', orden3)
+        polTaylorOrden5 = taylor(f10, x, centro, 'order', orden5)
+        polTaylorOrden7 = taylor(f10, x, centro, 'order', orden7)
     
     % Apartado B
+        % Dibujamos las funciones anteriores
         intervalo = [-5, 5];
         figure 10;
         hold on;
@@ -466,9 +490,11 @@ syms x;
         legend('Funcion f10', 'Polinimio T1', 'Polinimio T3', 'Polinimio T5', 'Polinimio T7')
     
     % Apartado C
+        % Calculamos las aproximaciones de la solucion con cada una de las funciones para comparar
         aproximarA = sym('1/2');
         aproximacion1 = double(subs(polTaylorOrden1, x, aproximarA))
         aproximacion3 = double(subs(polTaylorOrden3, x, aproximarA))
         aproximacion5 = double(subs(polTaylorOrden5, x, aproximarA))
         aproximacion7 = double(subs(polTaylorOrden7, x, aproximarA))
-        resultadoExacto = double(sin(aproximarA))  
+        resultadoReal = double(sin(aproximarA))
+        clear;
