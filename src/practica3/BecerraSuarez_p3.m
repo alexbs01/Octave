@@ -1,7 +1,7 @@
-% Ejercicios de las prácticas 3 de Octave
+% Ejercicios de la práctica 3 de Octave
 % Becerra Suárez, Alejandro - Grupo 3.2
 % GNU Octave Version: 5.1.0
-% symbolic Version: 2.8.0
+% Symbolic Version: 2.8.0
 clear;
 clc;
 pkg load symbolic;
