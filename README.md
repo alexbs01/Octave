@@ -193,6 +193,8 @@ syms a b c; % Las variables 'a', 'b' y 'c', tienen ahora un caracter simbolico
 funcion = a^2 + b + c;
 ```
 
+-----
+
 ### Constantes simbólicas
 
 También se pueden asignar constantes simbólicas para usarlas durante los programas.  
@@ -201,10 +203,46 @@ También se pueden asignar constantes simbólicas para usarlas durante los progr
 constanteSimbolica = sym('4/5'); % Y ahora la variables "constanteSimbolica" tiene un valor constante simbolico de 4/5
 ```
 
+-----
+
 ### Evaluación de variables
 
-Con las variables simbólicas se puede utilizar la función subs para evaluar punto X. La sintaxis de la función es ```subs(polinomio, variable, valor);``` o ```subs(polinomio, {variable1, ..., variableN}, {valor1,..., valorN});``` según queramos obtener una imagen o que en los valores se le asignen se sustituyan por los valores dados.  
+Con las variables simbólicas se puede utilizar la función subs para evaluar punto X. La sintaxis de la función es ```subs(funcion, variable, valor);``` o ```subs(funcion, {variable1, ..., variableN}, {valor1,..., valorN});``` según queramos obtener una imagen o que en los valores se le asignen se sustituyan por los valores dados.  
 
 ```octave
+f = x + 1;
+subs(f, x, 2)
+% Dara como resultado 3
+```
+
+-----
+
+### Limites de funciones
+
+Con la librería symbolic tenemos acceso a otras funciones como lo es ```limit``` esta función permite calcular límites de funciones, pudiendo escoger si la queremos evaluar a la izquierda o a la derecha.  
+
+```octave
+f = x + 1;
+limit(f, x, 2, 'left')
+limit(f, x, 2, 'right') % Si no especificamos por que lado, se evaluará por la derecha
+
+% En este caso como la funcion es continua dara el mismo resultado, pero con otra funcion
+% perfectamente puede dar que es infinito, o incluso hacer que x tienda al infinito
+```
+
+-----
+
+### Derivadas de funciones
+
+Otra función de symbolic es ```diff```, la cual nos permite calcular derivadas de las funciones que le pongamos como argumento.
+
+```octave
+f = x.^2 + 3*x - 1;
+diff(f, x) % ans = 2*x + 3
+diff(f, x, 2) % ans = 2
+
+% La función diff tiene tres posibles parámetros, el primero para la funcion, el segundo para la 
+% variable, y un tercero opcional para especificar que número de derivada queremos. Si no
+% especificamos hará la primera.  
 ```
 

@@ -18,6 +18,15 @@ function valorMedio = aproxValorMedio(funcion, x, a, b)
     valorMedio = (b - a)*subs(funcion, x, (b + a)/2);
 endfunction
 
+function aproximacionPuntoMedioCompuesto = puntoMedioTabla(a, b)
+    % aproxima meidante punto medio compuesto a|b
+    % a de longigtud 2*n + 1 puntos = len(b)
+    aMed = a(2:2:length(a));
+    bMed = b(2:2:length(b));
+    longitudIntervalo = a(2) - a(1);
+    aproximacionPuntoMedioCompuesto = 2*longitudIntervalo*sum(bMed);
+endfunction
+
 function desigualdad = indiceGini(funcion, x)
     desigualdad = 2*int(x - funcion, x, 0, 1);
 endfunction
@@ -161,41 +170,32 @@ syms x %n particiones i;
 % --------------------------------------------------------
 
 % Ejercicio 8
-##    f8 = @(x) x*sqrt(16-x.^2)
-##    divisiones = @(n) 10.^n + 1;
-##    
-##    
-##    h = @(particiones) (4 - 0)/(particiones)
-##    xi = @(i) 4 + i+h
-##    
-##    interiorFuncion = (sym2poly(xi(1)) + sym2poly(xi(2)))/(2);
-##    sum = f8(interiorFuncion)
-##    puntoMedioCompuesto = h(1)*sum
-##    
-##    sum = 0;
-##    for i = 1:2
-##        interiorFuncion = (xi(i) + xi(i + 1))/(2);
-##        sum = sum + f8(interiorFuncion)
-##    endfor
-##    puntoMedioCompuesto = h(2)*sum
-##    
-##    sum = 0;
-##    for i = 1:3
-##        interiorFuncion = (xi(i) + xi(i + 1))/(2);
-##        sum = sum + f8(interiorFuncion)
-##    endfor
-##    puntoMedioCompuesto = h(3)*sum
+    f8 = @(x) x*sqrt(16-x.^2)
+    puntos = @(n) 10.^n + 1;
+    
+    a = linspace(0, 4, puntos(1))
+    b = subs(f8, x, a)
+    puntoMedioTabla(a, b)
+    
+% --------------------------------------------------------    
+clear;
+syms x;
+% --------------------------------------------------------
 
 % Ejercicio 1 del Índice de Gini
 
 indiceGiniConL1 = double(indiceGini(x.^2.32, x))
 indiceGiniConL2 = double(indiceGini(x.^3.1, x))
 
+% Ejercicio 2 del Índice de Gini
 
+xi = 0:0.1:1;
+L = [0 0.0001 0.0016 0.0243 0.0256 0.0625 0.1296 0.2401 0.4096 0.6561 1.0];
 
+f2 = xi - L;
 
-
-
+aproximacionTrapacioCompuesto = 2*trapz(xi, f2)
+aproximacionValorMedioCompuesto = 2*puntoMedioTabla(xi, f2)
 
 
 
